@@ -1,13 +1,12 @@
 import React from 'react';
-import CoinTory from './components/page/CoinTory';
-import './App.css';
+import BudgetTracker from './components/BudgetTracker';
 
-const App = () => {
+function App() {
   return (
     <div className="App">
-      <CoinTory />
+      <BudgetTracker />
     </div>
   );
-};
+}
 
 export default App;
