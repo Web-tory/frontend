@@ -33,51 +33,24 @@ const BudgetTracker = () => {
   const handleRowClick = (expense) => {
     setSelectedExpense(expense);
   };
-
+  
   const handleDeleteExpense = (expenseId) => {
     if (window.confirm('이 지출 항목을 삭제하시겠습니까?')) {
       fetch(`http://localhost:5000/expenses/${expenseId}`, {
-        method: 'DELETE',
+        method: 'DELETE'
       })
       .then(response => {
         if (!response.ok) {
           throw new Error('Something went wrong');
         }
-        return response.json();
-      })
-      .then(() => {
-        // 서버에서 삭제 성공 후 클라이언트 상태 업데이트
         setExpenses(expenses.filter(exp => exp.id !== expenseId));
         alert('지출 항목이 삭제되었습니다.');
       })
       .catch(error => alert('삭제 중 오류가 발생했습니다: ' + error));
     }
   };
+  
 
-  const handleEditExpense = (expense) => {
-    const newName = prompt('새 지출 내역 이름을 입력하세요:', expense.name);
-    if (newName && newName !== expense.name) {
-      const updatedExpense = { ...expense, name: newName };
-      fetch(`http://localhost:5000/expenses/${expense.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedExpense),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Something went wrong');
-        }
-        return response.json();
-      })
-      .then(updatedData => {
-        setExpenses(expenses.map(exp => exp.id === expense.id ? updatedData : exp));
-        alert('지출 항목이 업데이트 되었습니다.');
-      })
-      .catch(error => alert('수정 중 오류가 발생했습니다: ' + error));
-    }
-  };
 
   
   const handleClose = () => {
@@ -169,7 +142,11 @@ const BudgetTracker = () => {
         </Grid>
       </Grid>
       <AddExpenseForm addExpense={addExpense} />
-      <ExpenseTable expenses={expenses} onRowClick={handleRowClick} />
+      <ExpenseTable
+      expenses={expenses}
+      onRowClick={handleRowClick}
+      onDeleteExpense={handleDeleteExpense} // Passing the delete function
+    />
       {selectedExpense && (
         <CommentModal 
           expense={selectedExpense} 
